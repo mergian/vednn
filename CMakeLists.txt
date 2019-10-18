@@ -4,10 +4,10 @@ set(NCC "/opt/nec/ve/bin/ncc" CACHE FILEPATH "Path of ncc")
 set(NCXX "/opt/nec/ve/bin/nc++" CACHE FILEPATH "Path of nc++")
 
 option(USE_OPENMP   "Use OpenMP" ON)
-option(DBUILD_SHARED_LIB "Build Shared Library" OFF)
+option(BUILD_SHARED_LIB "Build Shared Library" OFF)
 option(LOCAL_LLVM   "Try llvm+clang from .local? (use to avoid system clang, if nec.)" OFF)
-set(USE_FTRACE CACHE STRING "ftrace+veperf support [0]|1|2, 1 instruments less than 2" )
-set_property(CACHE USE_FTRACE PROPERTY STRINGS OFF 1 2) # informative only
+#set(USE_FTRACE CACHE STRING "ftrace+veperf support [0]|1|2, 1 instruments less than 2" )
+#set_property(CACHE USE_FTRACE PROPERTY STRINGS OFF 1 2) # informative only
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT) # avoid default install --> /usr/local
 	set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR})

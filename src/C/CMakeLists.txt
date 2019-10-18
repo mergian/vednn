@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.0)
 
 set(CMAKE_C_COMPILER ${NCC})
-set(CMAKE_C_FLAGS "-O4")
+set(CMAKE_CXX_COMPILER ${NCXX})
+
+set(CMAKE_C_FLAGS_RELEASE "-O4 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-O4 -DNDEBUG")
 
 include_directories("../")
 

@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.0)
 set(CMAKE_C_COMPILER ${NCC})
 set(CMAKE_CXX_COMPILER ${NCXX})
 
-set(CMAKE_C_FLAGS "-O4")
-set(CMAKE_CXX_FLAGS "-O4")
+set(CMAKE_C_FLAGS_RELEASE "-O4 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-O4 -DNDEBUG")
 
 if(USE_OPENMP)
 	set(LIBNAME vednn_openmp)
@@ -31,6 +31,11 @@ add_library(${LIBNAME} ${LIB_MODE}
         $<TARGET_OBJECTS:vednn_intrinsic_maxpooling_forward>
         $<TARGET_OBJECTS:vednn_intrinsic_activation>
 )
+
+if(USE_OPENMP)
+	target_compile_options(${LIBNAME} PUBLIC -fopenmp)
+	target_link_options(${LIBNAME} PUBLIC -fopenmp)
+endif()
 
 install(TARGETS ${LIBNAME} ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 install(FILES vednn.h DESTINATION include)
