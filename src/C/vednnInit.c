@@ -5,7 +5,7 @@ int __vednn_omp_num_threads = 0 ;
 
 __attribute__((constructor))
 void __vednn_init() {
-  const char *v = getenv("OMP_NUM_THREADS") ;
+  const char *v = getenv("VE_OMP_NUM_THREADS") ;
   const int   i = (v ==NULL ?  0 : atoi(v)) ;
 
   if( i > 0 )
