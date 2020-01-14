@@ -18,14 +18,14 @@ vednnLinearForward_wrapper(
     void 				*pDataOut
 )
 {
-#ifdef VEDNN_USE_OPENMP
-  if ( __vednn_omp_num_threads == 1 ) {
-    return pFunc(inDim, outDim, nBatch, pDataIn, pDataWeight, pDataOut ) ;
-  }
-  else {
+//#ifdef VEDNN_USE_OPENMP
+//  if ( __vednn_omp_num_threads == 1 ) {
+//    return pFunc(inDim, outDim, nBatch, pDataIn, pDataWeight, pDataOut ) ;
+//  }
+//  else {
     vednnError_t rc = VEDNN_SUCCESS ;
-#pragma omp parallel reduction(|:rc)
-    {
+//#pragma omp parallel reduction(|:rc)
+//    {
       uint64_t nthreads = omp_get_num_threads() ;
       uint64_t threadid = omp_get_thread_num() ;
 
@@ -44,12 +44,12 @@ vednnLinearForward_wrapper(
 
 	rc |= pFunc(inDim, outDim, myBatch, _pDataIn, pDataWeight, _pDataOut ) ;
       }
-    }
+//    }
     return rc ;
-  }
-#else
-  return pFunc(inDim, outDim, nBatch, pDataIn, pDataWeight, pDataOut ) ;
-#endif
+//  }
+//#else
+//  return pFunc(inDim, outDim, nBatch, pDataIn, pDataWeight, pDataOut ) ;
+//#endif
 }
 
 /* ----------------------------------------------------------------------- */

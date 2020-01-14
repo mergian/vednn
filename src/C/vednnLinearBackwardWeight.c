@@ -19,14 +19,14 @@ vednnLinearBackwardWeight_wrapper(
     void * 				pDataGradWeight
 )
 {
-#ifdef VEDNN_USE_OPENMP
-  if ( __vednn_omp_num_threads == 1 ) {
-    return pFunc(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight, 0, inDim) ;
-  }
-  else {
+//#ifdef VEDNN_USE_OPENMP
+//  if ( __vednn_omp_num_threads == 1 ) {
+//    return pFunc(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight, 0, inDim) ;
+//  }
+//  else {
     vednnError_t rc = VEDNN_SUCCESS ;
-#pragma omp parallel reduction(|:rc)
-    {
+//#pragma omp parallel reduction(|:rc)
+//    {
       int64_t nthreads = omp_get_num_threads() ;
       int64_t threadid = omp_get_thread_num() ;
 
@@ -43,12 +43,12 @@ vednnLinearBackwardWeight_wrapper(
 	rc |= pFunc(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight,
 	            inDimBegin, inDimBegin+myInDim) ;
       }
-    }
+//    }
     return rc ;
-  }
-#else
-  return pFunc(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight ) ;
-#endif
+//  }
+//#else
+//  return pFunc(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight ) ;
+//#endif
 }
 
 /* ----------------------------------------------------------------------- */

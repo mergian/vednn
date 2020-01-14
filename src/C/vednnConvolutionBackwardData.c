@@ -19,15 +19,15 @@ vednnConvolutionBackwardData_wrapper(
     void 				*pDataGradIn
 )
 {
-#ifdef VEDNN_USE_OPENMP
-  if ( __vednn_omp_num_threads == 1 ) {
-    return pFunc(pParamGradOut, pDataGradOut, pParamKernel, pDataKernel,
-  	  pParamConv, pParamGradIn, pDataGradIn );
-  }
-  else {
+//#ifdef VEDNN_USE_OPENMP
+//  if ( __vednn_omp_num_threads == 1 ) {
+//    return pFunc(pParamGradOut, pDataGradOut, pParamKernel, pDataKernel,
+//  	  pParamConv, pParamGradIn, pDataGradIn );
+//  }
+//  else {
     vednnError_t rc = VEDNN_SUCCESS ;
-#pragma omp parallel reduction(|:rc)
-    {
+//#pragma omp parallel reduction(|:rc)
+//    {
       int64_t nthreads = omp_get_num_threads() ;
       int64_t threadid = omp_get_thread_num() ;
 
@@ -51,13 +51,13 @@ vednnConvolutionBackwardData_wrapper(
 	rc |= pFunc(&_pParamGradOut, (void*)_pDataGradOut, pParamKernel, pDataKernel,
 		    pParamConv, &_pParamGradIn, (void*) _pDataGradIn) ;
       }
-    }
+//    }
     return rc ;
-  }
-#else
-  return pFunc(pParamGradOut, pDataGradOut, pParamKernel, pDataKernel,
-	  pParamConv, pParamGradIn, pDataGradIn );
-#endif
+//  }
+//#else
+//  return pFunc(pParamGradOut, pDataGradOut, pParamKernel, pDataKernel,
+//	  pParamConv, pParamGradIn, pDataGradIn );
+//#endif
 }
 
 /* ----------------------------------------------------------------------- */

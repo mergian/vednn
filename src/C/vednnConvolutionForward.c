@@ -19,14 +19,14 @@ vednnConvolutionForward_wrapper(
     void 				*pDataOut
 )
 {
-#ifdef VEDNN_USE_OPENMP
-  if ( __vednn_omp_num_threads == 1 ) {
-    return pFunc(pParamIn, pDataIn, pParamKernel, pDataKernel, pParamConv, pParamOut, pDataOut) ;
-  }
-  else {
+//#ifdef VEDNN_USE_OPENMP
+//  if ( __vednn_omp_num_threads == 1 ) {
+//    return pFunc(pParamIn, pDataIn, pParamKernel, pDataKernel, pParamConv, pParamOut, pDataOut) ;
+//  }
+//  else {
     vednnError_t rc = VEDNN_SUCCESS ;
-#pragma omp parallel reduction(|:rc)
-    {
+//#pragma omp parallel reduction(|:rc)
+//    {
       int64_t nthreads = omp_get_num_threads() ;
       int64_t threadid = omp_get_thread_num() ;
 
@@ -50,12 +50,12 @@ vednnConvolutionForward_wrapper(
 	rc |= pFunc(&_pParamIn, (void*)_pDataIn, pParamKernel, pDataKernel,
 		    pParamConv, &_pParamOut, (void*) _pDataOut) ;
       }
-    }
+//    }
     return rc ;
-  }
-#else
-  return pFunc(pParamIn, pDataIn, pParamKernel, pDataKernel, pParamConv, pParamOut, pDataOut) ;
-#endif
+//  }
+//#else
+//  return pFunc(pParamIn, pDataIn, pParamKernel, pDataKernel, pParamConv, pParamOut, pDataOut) ;
+//#endif
 }
 
 /* ----------------------------------------------------------------------- */
