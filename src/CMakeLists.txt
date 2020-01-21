@@ -21,15 +21,15 @@ endif()
 add_library(${LIBNAME} ${LIB_MODE}
         $<TARGET_OBJECTS:vednn_c_code>
         $<TARGET_OBJECTS:vednn_intrinsic_convolution_forward>
-        $<TARGET_OBJECTS:vednn_intrinsic_convolution_forward_addbias>
+        #$<TARGET_OBJECTS:vednn_intrinsic_convolution_forward_addbias>
         $<TARGET_OBJECTS:vednn_intrinsic_convolution_backward_data>
         $<TARGET_OBJECTS:vednn_intrinsic_convolution_backward_filter>
         $<TARGET_OBJECTS:vednn_intrinsic_linear_forward>
         $<TARGET_OBJECTS:vednn_intrinsic_linear_backward_data>
         $<TARGET_OBJECTS:vednn_intrinsic_linear_backward_weight>        
-        $<TARGET_OBJECTS:vednn_intrinsic_maxpooling_backward>
-        $<TARGET_OBJECTS:vednn_intrinsic_maxpooling_forward>
-        $<TARGET_OBJECTS:vednn_intrinsic_activation>
+        #$<TARGET_OBJECTS:vednn_intrinsic_maxpooling_backward>
+        #$<TARGET_OBJECTS:vednn_intrinsic_maxpooling_forward>
+        #$<TARGET_OBJECTS:vednn_intrinsic_activation>
 )
 
 if(USE_OPENMP)
