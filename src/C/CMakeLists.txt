@@ -9,20 +9,20 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O4 -DNDEBUG")
 include_directories("../")
 
 add_library(vednn_c_code OBJECT
-	vednnConvolutionForward.c
-	vednnConvolutionForwardAddBias.c
-	vednnConvolutionBackwardData.c
-	vednnConvolutionBackwardFilter.c
+	vednnConvolutionForward.cpp
+#	vednnConvolutionForwardAddBias.c
+	vednnConvolutionBackwardData.cpp
+	vednnConvolutionBackwardFilter.cpp
 	vednnLinearForward.c
 	vednnLinearBackwardData.c
 	vednnLinearBackwardWeight.c
-	vednnActivationForward.c
-	vednnActivationBackward.c
-	vednnMaxPoolingForward.c
-	vednnMaxPoolingForward_default.c
-	vednnMaxPoolingBackward.c
-	vednnMaxPoolingBackward_default.c
-	vednnSoftmaxForward.c
+#	vednnActivationForward.c
+#	vednnActivationBackward.c
+#	vednnMaxPoolingForward.c
+#	vednnMaxPoolingForward_default.c
+#	vednnMaxPoolingBackward.c
+#	vednnMaxPoolingBackward_default.c
+#	vednnSoftmaxForward.c
 	vednnInit.c
 )
 

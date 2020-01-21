@@ -17,38 +17,27 @@ vednnLinearBackwardWeight_wrapper(
     const void * 			pDataIn,
     const void * 			pDataGradOut,
     void * 				pDataGradWeight
-)
-{
-//#ifdef VEDNN_USE_OPENMP
-//  if ( __vednn_omp_num_threads == 1 ) {
-//    return pFunc(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight, 0, inDim) ;
-//  }
-//  else {
+) {
     vednnError_t rc = VEDNN_SUCCESS ;
-//#pragma omp parallel reduction(|:rc)
-//    {
-      int64_t nthreads = omp_get_num_threads() ;
-      int64_t threadid = omp_get_thread_num() ;
+	#pragma omp parallel reduction(|:rc)
+	{
+		int64_t nthreads = omp_get_num_threads() ;
+		int64_t threadid = omp_get_thread_num() ;
 
-      int64_t nInDim = inDim / nthreads ;
-      int64_t remain = inDim % nthreads ;
+		int64_t nInDim = inDim / nthreads ;
+		int64_t remain = inDim % nthreads ;
 
-      int64_t inDimBegin = nInDim * threadid + ( threadid < remain ? threadid : remain ) ;
-      int64_t myInDim    = nInDim + ( threadid < remain ? 1 : 0 ) ;
+		int64_t inDimBegin = nInDim * threadid + ( threadid < remain ? threadid : remain ) ;
+		int64_t myInDim    = nInDim + ( threadid < remain ? 1 : 0 ) ;
 
-      if( nInDim == 0 ) {
-	rc |= VEDNN_SUCCESS ;
-      }
-      else  {
-	rc |= pFunc(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight,
-	            inDimBegin, inDimBegin+myInDim) ;
-      }
-//    }
-    return rc ;
-//  }
-//#else
-//  return pFunc(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight ) ;
-//#endif
+		if( nInDim == 0 ) {
+			rc |= VEDNN_SUCCESS;
+		} else {
+			rc |= pFunc(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight,
+				inDimBegin, inDimBegin+myInDim) ;
+		}
+	}
+    return rc;
 }
 
 /* ----------------------------------------------------------------------- */

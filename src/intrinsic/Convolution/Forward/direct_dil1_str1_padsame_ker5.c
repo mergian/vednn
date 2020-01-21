@@ -36,7 +36,7 @@ vednnConvolutionForward_direct_dil1_str1_padsame_ker5(
 //  const int64_t dilationHeight = pParamConv->dilationHeight;	/* must be 1 */
 
   const int64_t inChannelGroup  = inChannel  / group;   // equal to pDataKernel->inChannel
-  const int64_t outChannelGroup = outChannel / group;   // equal to pDataKernel->outChannel
+  const int64_t outChannelGroup = pParamKernel->outChannel / group;   // equal to pDataKernel->outChannel
 
   const float * restrict pIn     = pDataIn;
   const float * restrict pKernel = pDataKernel;
