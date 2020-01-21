@@ -2846,7 +2846,8 @@ vednnConvolutionForward_direct_vecC(
   const int64_t dilationHeight = pParamConv->dilationHeight;
 
   const int64_t inChannelGroup  = inChannel  / group;   // equal to pDataKernel->inChannel
-  const int64_t outChannelGroup = pParamKernel->outChannel / group;   // equal to pDataKernel->outChannel
+  const int64_t outChannelGroup = pParamKernel->outChannel;   // equal to pDataKernel->outChannel
+  const int64_t outChannelOffset= outChannel / group;   // equal to pDataKernel->outChannel
 
   const float * restrict pIn     = pDataIn;
   const float * restrict pKernel = pDataKernel;
@@ -2855,8 +2856,8 @@ vednnConvolutionForward_direct_vecC(
   for (int64_t n=0; n<batch; n++) {
     for (int64_t g = 0; g < group; g++) {
       int64_t inGroupOffset   = g * inChannelGroup  * inHeight  * inWidth;
-      int64_t outGroupOffset  = g * outChannelGroup * outHeight * outWidth;
-      int64_t kernGroupOffset = g * outChannelGroup * inChannelGroup * kernHeight * kernWidth;
+      int64_t outGroupOffset  = g * outChannelOffset * outHeight * outWidth;
+      int64_t kernGroupOffset = g * outChannelOffset * inChannelGroup * kernHeight * kernWidth;
 
       int64_t k=0 ;
       if( (outChannelGroup & 0x01) == 1 ) {

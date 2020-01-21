@@ -37,7 +37,8 @@ vednnConvolutionForward_direct_dil1_str1_padsame_ker3_c1(
 //  const int64_t dilationHeight = pParamConv->dilationHeight;	/* must be 1 */
 
 //  const int64_t inChannelGroup  = inChannel  / group;   // equal to pDataKernel->inChannel ( must be 1 )
-  const int64_t outChannelGroup = pParamKernel->outChannel / group;   // equal to pDataKernel->outChannel
+  const int64_t outChannelGroup = pParamKernel->outChannel;   // equal to pDataKernel->outChannel
+  const int64_t outChannelOffset= outChannel / group;   // equal to pDataKernel->outChannel
 
   const float * restrict pIn     = pDataIn;
   const float * restrict pKernel = pDataKernel;
@@ -50,8 +51,8 @@ vednnConvolutionForward_direct_dil1_str1_padsame_ker3_c1(
       for (int64_t g = 0; g < group; g++) {
 
 	const int64_t inGroupOffset   = g * inHeight * inWidth;
-	const int64_t outGroupOffset  = g * outChannelGroup * outHeight * outWidth;
-	const int64_t kernGroupOffset = g * outChannelGroup * kernHeight * kernWidth;
+	const int64_t outGroupOffset  = g * outChannelOffset * outHeight * outWidth;
+	const int64_t kernGroupOffset = g * outChannelOffset * kernHeight * kernWidth;
 
 	int k = 0 ;
 	if ( (outChannelGroup & 0x01) == 1 ) {
