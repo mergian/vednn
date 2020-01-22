@@ -8,6 +8,7 @@ typedef
 vednnError_t (*vednnLinearBackwardData_t)(
     const uint64_t			inDim,
     const uint64_t			outDim,
+    const uint64_t			inIdx,
     const uint64_t			nBatch,
     const void * 			pDataGradOut,
     const void * 			pDataWeight,
@@ -17,6 +18,7 @@ vednnError_t (*vednnLinearBackwardData_t)(
 vednnError_t vednnLinearBackwardData_default(
     const uint64_t			inDim,
     const uint64_t			outDim,
+    const uint64_t			inIdx,
     const uint64_t			nBatch,
     const void * 			pDataGradOut,
     const void * 			pDataWeight,
@@ -26,6 +28,7 @@ vednnError_t vednnLinearBackwardData_default(
 vednnError_t vednnLinearBackwardData_o2X_woaligned(
     const uint64_t			inDim,
     const uint64_t			outDim,
+    const uint64_t			inIdx,
     const uint64_t			nBatch,
     const void * 			pDataGradOut,
     const void * 			pDataWeight,
@@ -35,6 +38,7 @@ vednnError_t vednnLinearBackwardData_o2X_woaligned(
 vednnError_t vednnLinearBackwardData_oU128(
     const uint64_t			inDim,
     const uint64_t			outDim,
+    const uint64_t			inIdx,
     const uint64_t			nBatch,
     const void * 			pDataGradOut,
     const void * 			pDataWeight,
@@ -44,6 +48,7 @@ vednnError_t vednnLinearBackwardData_oU128(
 vednnError_t vednnLinearBackwardData_o2XU128_waligned(
     const uint64_t			inDim,
     const uint64_t			outDim,
+    const uint64_t			inIdx,
     const uint64_t			nBatch,
     const void * 			pDataGradOut,
     const void * 			pDataWeight,
@@ -53,6 +58,7 @@ vednnError_t vednnLinearBackwardData_o2XU128_waligned(
 vednnError_t vednnLinearBackwardData_oU256(
     const uint64_t			inDim,
     const uint64_t			outDim,
+    const uint64_t			inIdx,
     const uint64_t			nBatch,
     const void * 			pDataGradOut,
     const void * 			pDataWeight,

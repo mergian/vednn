@@ -11,9 +11,10 @@
 vednnError_t vednnLinearForward_o2X_woaligned(
     const uint64_t			inDim,
     const uint64_t			outDim,
+    const uint64_t			outIdx,
     const uint64_t			nBatch,
-    const void * restrict		pDataIn,
-    const void * restrict		pDataWeight,
+    const void * restrict	pDataIn,
+	const void * restrict	pDataWeight,
     void * restrict			pDataOut
 )
 {
@@ -27,8 +28,8 @@ vednnError_t vednnLinearForward_o2X_woaligned(
 
   switch( batchRemain ) {
   case 1 :
-    for(int64_t o=0; o<outDim; o+=2*VLEN) {
-      const int64_t vl = (outDim-o < 2*VLEN ? outDim - o : 2*VLEN) >> 1 ;
+    for(int64_t o=0; o<outIdx; o+=2*VLEN) {
+      const int64_t vl = (outIdx-o < 2*VLEN ? outIdx - o : 2*VLEN) >> 1 ;
 
       __vr vrsum_b0 = _vel_pvbrd_vsl(0UL, vl) ;
 
@@ -75,8 +76,8 @@ vednnError_t vednnLinearForward_o2X_woaligned(
     n+=1 ;
     break ;
   case 2 :
-    for(int64_t o=0; o<outDim; o+=2*VLEN) {
-      const int64_t vl = (outDim-o < 2*VLEN ? outDim - o : 2*VLEN) >> 1 ;
+    for(int64_t o=0; o<outIdx; o+=2*VLEN) {
+      const int64_t vl = (outIdx-o < 2*VLEN ? outIdx - o : 2*VLEN) >> 1 ;
 
       __vr vrsum_b0 = _vel_pvbrd_vsl(0UL, vl) ;
       __vr vrsum_b1 = _vel_pvbrd_vsl(0UL, vl) ;
@@ -146,8 +147,8 @@ vednnError_t vednnLinearForward_o2X_woaligned(
     n+=2 ;
     break ;
   case 3 :
-    for(int64_t o=0; o<outDim; o+=2*VLEN) {
-      const int64_t vl = (outDim-o < 2*VLEN ? outDim - o : 2*VLEN) >> 1 ;
+    for(int64_t o=0; o<outIdx; o+=2*VLEN) {
+      const int64_t vl = (outIdx-o < 2*VLEN ? outIdx - o : 2*VLEN) >> 1 ;
 
       __vr vrsum_b0 = _vel_pvbrd_vsl(0UL, vl) ;
       __vr vrsum_b1 = _vel_pvbrd_vsl(0UL, vl) ;
@@ -238,8 +239,8 @@ vednnError_t vednnLinearForward_o2X_woaligned(
     break ;
   }
   for(; n<nBatch; n+=4) {
-    for(int64_t o=0; o<outDim; o+=2*VLEN) {
-      const int64_t vl = (outDim-o < 2*VLEN ? outDim - o : 2*VLEN) >> 1 ;
+    for(int64_t o=0; o<outIdx; o+=2*VLEN) {
+      const int64_t vl = (outIdx-o < 2*VLEN ? outIdx - o : 2*VLEN) >> 1 ;
 
       __vr vrsum_b0 = _vel_pvbrd_vsl(0UL, vl) ;
       __vr vrsum_b1 = _vel_pvbrd_vsl(0UL, vl) ;

@@ -12,6 +12,7 @@
 vednnError_t vednnLinearForward_oU32(
     const uint64_t			inDim,
     const uint64_t			outDim,
+    const uint64_t			outIdx,
     const uint64_t			nBatch,
     const void * restrict		pDataIn,
     const void * restrict		pDataWeight,
@@ -30,7 +31,7 @@ vednnError_t vednnLinearForward_oU32(
 
   switch( batchRemain ) {
   case 1:
-    for(int64_t o=0; o<outDim; o++) {
+    for(int64_t o=0; o<outIdx; o++) {
 
       __vr vrsum_b0 = _vel_vbrds_vsl(0.0f, maxvl) ;
 
@@ -51,7 +52,7 @@ vednnError_t vednnLinearForward_oU32(
     break ;
 
   case 2:
-    for(int64_t o=0; o<outDim; o++) {
+    for(int64_t o=0; o<outIdx; o++) {
 
       __vr vrsum_b0 = _vel_vbrds_vsl(0.0f, maxvl) ;
       __vr vrsum_b1 = _vel_vbrds_vsl(0.0f, maxvl) ;
@@ -76,7 +77,7 @@ vednnError_t vednnLinearForward_oU32(
     n+=2 ;
     break ;
   case 3:
-    for(int64_t o=0; o<outDim; o++) {
+    for(int64_t o=0; o<outIdx; o++) {
 
       __vr vrsum_b0 = _vel_vbrds_vsl(0.0f, maxvl) ;
       __vr vrsum_b1 = _vel_vbrds_vsl(0.0f, maxvl) ;
@@ -110,7 +111,7 @@ vednnError_t vednnLinearForward_oU32(
   }
 
   for(; n<nBatch; n+=4) {
-    for(int64_t o=0; o<outDim; o++) {
+    for(int64_t o=0; o<outIdx; o++) {
 
       __vr vrsum_b0 = _vel_vbrds_vsl(0.0f, maxvl) ;
       __vr vrsum_b1 = _vel_vbrds_vsl(0.0f, maxvl) ;

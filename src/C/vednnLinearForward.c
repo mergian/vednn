@@ -46,11 +46,11 @@ vednnLinearForward_wrapper(
 
 /* ----------------------------------------------------------------------- */
 vednnError_t vednnLinearForward(
-    const uint64_t			inDim,
-    const uint64_t			outDim,
-    const uint64_t			nBatch,
-    const void 				*pDataIn,
-    const void 				*pDataWeight,
+    const uint64_t		inDim,
+    const uint64_t		outDim,
+    const uint64_t		nBatch,
+    const void 			*pDataIn,
+    const void 			*pDataWeight,
     void 				*pDataOut
 )
 {

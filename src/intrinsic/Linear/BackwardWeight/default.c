@@ -15,7 +15,7 @@ static inline void b1(
   const uint64_t	nInDim,
   const float * 	pIn,
   const float * 	pGOut,
-  float * 		pGWeight
+  float * 			pGWeight
 )
 {
   for(int64_t o=0; o<outDim; o+=VLEN) {

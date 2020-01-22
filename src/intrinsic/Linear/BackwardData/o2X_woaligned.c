@@ -12,13 +12,14 @@
 static inline void b1(
   const uint64_t	inDim,
   const uint64_t	outDim,
+  const uint64_t	inIdx,
   const float * 	pGOut,
   const float * 	pWeight,
   float * 		pGIn
 )
 {
   int64_t i=0 ;
-  switch(inDim&0x3) {
+  switch(inIdx&0x3) {
   case 1:
     {
       __vr vrsum_b0_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
@@ -107,7 +108,7 @@ static inline void b1(
     break ;
   default : break ;
   }
-  for(; i<inDim; i+=4)
+  for(; i<inIdx; i+=4)
   {
     __vr vrsum_b0_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
     __vr vrsum_b0_i1 = _vel_vbrdl_vsl(0UL, VLEN) ;
@@ -152,13 +153,14 @@ static inline void b1(
 static inline void b2(
   const uint64_t	inDim,
   const uint64_t	outDim,
+  const uint64_t	inIdx,
   const float * 	pGOut,
   const float * 	pWeight,
   float * 		pGIn
 )
 {
   int64_t i=0 ;
-  switch(inDim&0x3) {
+  switch(inIdx&0x3) {
   case 1:
     {
       __vr vrsum_b0_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
@@ -282,7 +284,7 @@ static inline void b2(
     break ;
   default : break ;
   }
-  for(; i<inDim; i+=4)
+  for(; i<inIdx; i+=4)
   {
     __vr vrsum_b0_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
     __vr vrsum_b1_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
@@ -352,13 +354,14 @@ static inline void b2(
 static inline void b3(
   const uint64_t	inDim,
   const uint64_t	outDim,
+  const uint64_t	inIdx,
   const float * 	pGOut,
   const float * 	pWeight,
   float * 		pGIn
 )
 {
   int64_t i=0 ;
-  switch(inDim&0x3) {
+  switch(inIdx&0x3) {
   case 1:
     {
       __vr vrsum_b0_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
@@ -515,7 +518,7 @@ static inline void b3(
     break ;
   default : break ;
   }
-  for(; i<inDim; i+=4)
+  for(; i<inIdx; i+=4)
   {
     __vr vrsum_b0_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
     __vr vrsum_b1_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
@@ -606,13 +609,14 @@ static inline void b3(
 static inline void b4(
   const uint64_t	inDim,
   const uint64_t	outDim,
+  const uint64_t	inIdx,
   const float * 	pGOut,
   const float * 	pWeight,
   float * 		pGIn
 )
 {
   int64_t i=0 ;
-  switch(inDim&0x3) {
+  switch(inIdx&0x3) {
   case 1:
     {
       __vr vrsum_b0_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
@@ -802,7 +806,7 @@ static inline void b4(
     break ;
   default : break ;
   }
-  for(; i<inDim; i+=4)
+  for(; i<inIdx; i+=4)
   {
     __vr vrsum_b0_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
     __vr vrsum_b1_i0 = _vel_vbrdl_vsl(0UL, VLEN) ;
@@ -913,6 +917,7 @@ static inline void b4(
 vednnError_t vednnLinearBackwardData_o2X_woaligned(
     const uint64_t			inDim,
     const uint64_t			outDim,
+    const uint64_t			inIdx,
     const uint64_t			nBatch,
     const void * restrict		pDataGradOut,
     const void * restrict		pDataWeight,
@@ -928,24 +933,24 @@ vednnError_t vednnLinearBackwardData_o2X_woaligned(
 
   switch( batchRemain ) {
   case 1:
-    b1(inDim, outDim,
+    b1(inDim, outDim, inIdx,
        pGOut+n*outDim, pWeight, pGIn+n*inDim ) ;
     n+=1 ;
     break ;
   case 2:
-    b2(inDim, outDim,
+    b2(inDim, outDim, inIdx,
        pGOut+n*outDim, pWeight, pGIn+n*inDim ) ;
     n+=2 ;
     break ;
   case 3:
-    b3(inDim, outDim,
+    b3(inDim, outDim, inIdx,
        pGOut+n*outDim, pWeight, pGIn+n*inDim ) ;
     n+=3;
     break ;
   default : break ;
   }
   for(; n<nBatch; n+=4) {
-    b4(inDim, outDim,
+    b4(inDim, outDim, inIdx,
        pGOut+n*outDim, pWeight, pGIn+n*inDim ) ;
   }
 

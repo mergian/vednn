@@ -13,9 +13,9 @@ add_library(vednn_c_code OBJECT
 #	vednnConvolutionForwardAddBias.c
 	vednnConvolutionBackwardData.cpp
 	vednnConvolutionBackwardFilter.cpp
-	vednnLinearForward.c
-	vednnLinearBackwardData.c
-	vednnLinearBackwardWeight.c
+	vednnLinearForward.cpp
+	vednnLinearBackwardData.cpp
+	vednnLinearBackwardWeight.cpp
 #	vednnActivationForward.c
 #	vednnActivationBackward.c
 #	vednnMaxPoolingForward.c

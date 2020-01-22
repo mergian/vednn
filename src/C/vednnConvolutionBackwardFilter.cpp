@@ -1,4 +1,3 @@
-
 #define restrict
 extern "C" {
 #include "vednnConvolutionBackwardFilter.h"

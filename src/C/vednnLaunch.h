@@ -1,5 +1,7 @@
 #pragma once
 
+#include "vednn.h"
+
 #ifdef VEDNN_USE_OPENMP
 #include <omp.h>
 #endif
@@ -35,7 +37,7 @@ inline vednnError_t vednn_launch_1d(const int cnt, F func) {
 
 //------------------------------------------------------------------------------
 template<typename F>
-inline vednnError_t vednn_launch_2d(const int x, const int y, F func, const int alignX = 1, const int alignY = 1) {
+inline vednnError_t vednn_launch_2d(const int x, const int y, F func) {
 	int rc = VEDNN_SUCCESS;
 	int cnt = x * y;
 	if(cnt == 1) {
@@ -49,9 +51,6 @@ inline vednnError_t vednn_launch_2d(const int x, const int y, F func, const int 
 			if(x > (nthreads/2)) {
 				int xcnt = (x + nthreads - 1) / nthreads;
 
-				if(alignX > 1)
-					xcnt = ((xcnt + alignX - 1) / alignX) * alignX;
-				
 				int min_x = tx * xcnt;
 				int max_x = std::min((tx+1) * xcnt, x);
 			
@@ -67,10 +66,6 @@ inline vednnError_t vednn_launch_2d(const int x, const int y, F func, const int 
 				int max_x = min_x + 1;
 
 				int ycnt = (y + ythreads - 1) / ythreads;
-
-				if(alignY > 1)
-					ycnt = ((ycnt + alignY - 1) / alignY) * alignY;
-
 				int min_y = ty * ycnt;
 				int max_y = std::min((ty+1) * ycnt, y);
 

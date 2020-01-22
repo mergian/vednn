@@ -11,13 +11,14 @@
 static inline void b1(
   const uint64_t	inDim,
   const uint64_t	outDim,
+  const uint64_t	outIdx,
   const float * 	pIn,
   const float * 	pWeight,
   float * 		pOut
 )
 {
-  for(int64_t o=0; o<outDim; o+=VLEN) {
-    const int64_t vl = outDim-o < VLEN ? outDim - o : VLEN ;
+  for(int64_t o=0; o<outIdx; o+=VLEN) {
+    const int64_t vl = outIdx-o < VLEN ? outIdx - o : VLEN ;
     __vr vrsum_b0 = _vel_vbrdl_vsl(0UL, vl) ;
 
     int64_t i=0;
@@ -59,13 +60,14 @@ static inline void b1(
 static inline void b2(
   const uint64_t	inDim,
   const uint64_t	outDim,
+  const uint64_t	outIdx,
   const float * 	pIn,
   const float * 	pWeight,
   float * 		pOut
 )
 {
-  for(int64_t o=0; o<outDim; o+=VLEN) {
-    const int64_t vl = outDim-o < VLEN ? outDim - o : VLEN ;
+  for(int64_t o=0; o<outIdx; o+=VLEN) {
+    const int64_t vl = outIdx-o < VLEN ? outIdx - o : VLEN ;
     __vr vrsum_b0 = _vel_vbrdl_vsl(0UL,vl) ;
     __vr vrsum_b1 = _vel_vbrdl_vsl(0UL,vl) ;
 
@@ -123,13 +125,14 @@ static inline void b2(
 static inline void b3(
   const uint64_t	inDim,
   const uint64_t	outDim,
+  const uint64_t	outIdx,
   const float * 	pIn,
   const float * 	pWeight,
   float * 		pOut
 )
 {
-  for(int64_t o=0; o<outDim; o+=VLEN) {
-    const int64_t vl = outDim-o < VLEN ? outDim - o : VLEN ;
+  for(int64_t o=0; o<outIdx; o+=VLEN) {
+    const int64_t vl = outIdx-o < VLEN ? outIdx - o : VLEN ;
     __vr vrsum_b0 = _vel_vbrdl_vsl(0UL,vl) ;
     __vr vrsum_b1 = _vel_vbrdl_vsl(0UL,vl) ;
     __vr vrsum_b2 = _vel_vbrdl_vsl(0UL,vl) ;
@@ -198,13 +201,14 @@ static inline void b3(
 static inline void b4(
   const uint64_t	inDim,
   const uint64_t	outDim,
+  const uint64_t	outIdx,
   const float * 	pIn,
   const float * 	pWeight,
   float * 		pOut
 )
 {
-  for(int64_t o=0; o<outDim; o+=VLEN) {
-    const int64_t vl = outDim-o < VLEN ? outDim - o : VLEN ;
+  for(int64_t o=0; o<outIdx; o+=VLEN) {
+    const int64_t vl = outIdx-o < VLEN ? outIdx - o : VLEN ;
     __vr vrsum_b0 = _vel_vbrdl_vsl(0UL,vl) ;
     __vr vrsum_b1 = _vel_vbrdl_vsl(0UL,vl) ;
     __vr vrsum_b2 = _vel_vbrdl_vsl(0UL,vl) ;
@@ -283,13 +287,14 @@ static inline void b4(
 static inline void b5(
   const uint64_t	inDim,
   const uint64_t	outDim,
+  const uint64_t	outIdx,
   const float * 	pIn,
   const float * 	pWeight,
   float * 		pOut
 )
 {
-  for(int64_t o=0; o<outDim; o+=VLEN) {
-    const int64_t vl = outDim-o < VLEN ? outDim - o : VLEN ;
+  for(int64_t o=0; o<outIdx; o+=VLEN) {
+    const int64_t vl = outIdx-o < VLEN ? outIdx - o : VLEN ;
     __vr vrsum_b0 = _vel_vbrdl_vsl(0UL,vl) ;
     __vr vrsum_b1 = _vel_vbrdl_vsl(0UL,vl) ;
     __vr vrsum_b2 = _vel_vbrdl_vsl(0UL,vl) ;
@@ -376,15 +381,16 @@ static inline void b5(
 }
 
 static inline void b6(
-  const uint64_t	inDim,
-  const uint64_t	outDim,
-  const float * 	pIn,
-  const float * 	pWeight,
-  float * 		pOut
+	const uint64_t	inDim,
+	const uint64_t	outDim,
+	const uint64_t	outIdx,
+	const float * 	pIn,
+	const float * 	pWeight,
+	float * 		pOut
 )
 {
-  for(int64_t o=0; o<outDim; o+=VLEN) {
-    const int64_t vl = outDim-o < VLEN ? outDim - o : VLEN ;
+  for(int64_t o=0; o<outIdx; o+=VLEN) {
+    const int64_t vl = outIdx-o < VLEN ? outIdx - o : VLEN ;
     __vr vrsum_b0 = _vel_vbrdl_vsl(0UL,vl) ;
     __vr vrsum_b1 = _vel_vbrdl_vsl(0UL,vl) ;
     __vr vrsum_b2 = _vel_vbrdl_vsl(0UL,vl) ;
@@ -484,9 +490,10 @@ static inline void b6(
 vednnError_t vednnLinearForward_default(
     const uint64_t			inDim,
     const uint64_t			outDim,
+    const uint64_t			outIdx,
     const uint64_t			nBatch,
-    const void * restrict		pDataIn,
-    const void * restrict		pDataWeight,
+    const void * restrict	pDataIn,
+    const void * restrict	pDataWeight,
     void * restrict			pDataOut
 )
 {
@@ -500,27 +507,27 @@ vednnError_t vednnLinearForward_default(
 
   switch( batchRemain ) {
   case 1 :
-    b1(inDim, outDim,
+    b1(inDim, outDim, outIdx,
        pIn+n*inDim, pWeight, pOut+n*outDim) ;
     n+=1 ;
     break ;
   case 2 :
-    b2(inDim, outDim,
+    b2(inDim, outDim, outIdx,
        pIn+n*inDim, pWeight, pOut+n*outDim) ;
     n+=2 ;
     break ;
   case 3 :
-    b3(inDim, outDim,
+    b3(inDim, outDim, outIdx,
        pIn+n*inDim, pWeight, pOut+n*outDim) ;
     n+=3 ;
     break ;
   case 4 :
-    b4(inDim, outDim,
+    b4(inDim, outDim, outIdx,
        pIn+n*inDim, pWeight, pOut+n*outDim) ;
     n+=4 ;
     break ;
   case 5 :
-    b5(inDim, outDim,
+    b5(inDim, outDim, outIdx,
        pIn+n*inDim, pWeight, pOut+n*outDim) ;
     n+=5 ;
     break ;
@@ -528,7 +535,7 @@ vednnError_t vednnLinearForward_default(
     break ;
   }
   for(; n<nBatch; n+=6) {
-    b6(inDim, outDim,
+    b6(inDim, outDim, outIdx,
        pIn+n*inDim, pWeight, pOut+n*outDim) ;
   }
 
