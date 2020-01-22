@@ -37,7 +37,8 @@ vednnConvolutionBackwardData_direct_dil1_str1_padsame_ker3 (
 //  const int64_t dilationHeight = pParamConv->dilationHeight;	/* must be 1 */
 
   const int64_t gOutChannelGroup = gOutChannel / group;
-  const int64_t gInChannelGroup  = gInChannel  / group;
+  const int64_t gInChannelGroup  = pParamKernel->inChannel;
+  const int64_t gInChannelOffset = gInChannel / group;
 
   const float * restrict pGOut   = pDataGradOut;
   const float * restrict pKernel = pDataKernel;
@@ -50,9 +51,9 @@ vednnConvolutionBackwardData_direct_dil1_str1_padsame_ker3 (
     for (int64_t n=0; n<batch; n++) {
       for (int64_t g = 0; g < group; g++) {
 
-	int64_t gInGroupOffset  = g * gInChannelGroup * gInHeight * gInWidth;
+	int64_t gInGroupOffset  = g * gInChannelOffset * gInHeight * gInWidth;
 	int64_t gOutGroupOffset = g * gOutChannelGroup  * gOutHeight  * gOutWidth;
-	int64_t kernGroupOffset = g * gOutChannelGroup  * gInChannelGroup * kernHeight * kernWidth;
+	int64_t kernGroupOffset = g * gOutChannelGroup  * gInChannelOffset * kernHeight * kernWidth;
 
 	int k=0;
 	if ( (gInChannelGroup & 0x01) == 1 ) {
@@ -94,7 +95,7 @@ vednnConvolutionBackwardData_direct_dil1_str1_padsame_ker3 (
 
 	    for (int64_t c=0; c<gOutChannelGroup; c++) {
 	      const float *pGOutChannel = pGOut + gOutGroupOffset + ((n * gOutChannel + c) * gOutHeight * gOutWidth ) ;
-	      const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelGroup + k) * kernHeight) * kernWidth ;
+	      const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelOffset + k) * kernHeight) * kernWidth ;
 
 	      /* memory access errors mihgt be caused */
 	      __vr vrgout_r0s0 = _vel_vldu_vssl(4,&pGOutChannel[gip+(padHeight-0)*gOutWidth+(padWidth-0)], vl) ;
@@ -179,7 +180,7 @@ vednnConvolutionBackwardData_direct_dil1_str1_padsame_ker3 (
 
 	    for (int64_t c=0; c<gOutChannelGroup; c++) {
 	      const float *pGOutChannel = pGOut + gOutGroupOffset + ((n * gOutChannel + c) * gOutHeight * gOutWidth ) ;
-	      const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelGroup + k) * kernHeight) * kernWidth ;
+	      const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelOffset + k) * kernHeight) * kernWidth ;
 
 	      /* memory access errors mihgt be caused */
 	      __vr vrgout_r0s0 = _vel_vldu_vssl(4,&pGOutChannel[gip+(padHeight-0)*gOutWidth+(padWidth-0)], vl) ;
@@ -281,7 +282,7 @@ vednnConvolutionBackwardData_direct_dil1_str1_padsame_ker3 (
 
 	    for (int64_t c=0; c<gOutChannelGroup; c++) {
 	      const float *pGOutChannel = pGOut + gOutGroupOffset + ((n * gOutChannel + c) * gOutHeight * gOutWidth ) ;
-	      const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelGroup + k) * kernHeight) * kernWidth ;
+	      const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelOffset + k) * kernHeight) * kernWidth ;
 
 	      /* memory access errors mihgt be caused */
 	      __vr vrgout_r0s0 = _vel_vldu_vssl(4,&pGOutChannel[gip+(padHeight-0)*gOutWidth+(padWidth-0)], vl) ;
@@ -390,7 +391,7 @@ vednnConvolutionBackwardData_direct_dil1_str1_padsame_ker3 (
 
 	    for (int64_t c=0; c<gOutChannelGroup; c++) {
 	      const float *pGOutChannel = pGOut + gOutGroupOffset + ((n * gOutChannel + c) * gOutHeight * gOutWidth ) ;
-	      const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelGroup + k) * kernHeight) * kernWidth ;
+	      const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelOffset + k) * kernHeight) * kernWidth ;
 
 	      /* memory access errors mihgt be caused */
 	      __vr vrgout_r0s0 = _vel_vldu_vssl(4,&pGOutChannel[gip+(padHeight-0)*gOutWidth+(padWidth-0)], vl) ;
@@ -513,7 +514,7 @@ vednnConvolutionBackwardData_direct_dil1_str1_padsame_ker3 (
 
 	    for (int64_t c=0; c<gOutChannelGroup; c++) {
 	      const float *pGOutChannel = pGOut + gOutGroupOffset + ((n * gOutChannel + c) * gOutHeight * gOutWidth ) ;
-	      const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelGroup + k) * kernHeight) * kernWidth ;
+	      const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelOffset + k) * kernHeight) * kernWidth ;
 
 	      /* memory access errors mihgt be caused */
 	      __vr vrgout_r0s0 = _vel_vldu_vssl(4,&pGOutChannel[gip+(padHeight-0)*gOutWidth+(padWidth-0)], vl) ;

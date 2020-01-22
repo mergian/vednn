@@ -36,7 +36,8 @@ vednnConvolutionBackwardData_direct_dil1_str1_iwU128(
 //  const int64_t dilationHeight = pParamConv->dilationHeight;		// must be 1
 
   const int64_t gOutChannelGroup = gOutChannel  / group;
-  const int64_t gInChannelGroup  = gInChannel / group;
+  const int64_t gInChannelGroup  = pParamKernel->inChannel;
+  const int64_t gInChannelOffset = gInChannel / group;
 
   const float * restrict pGOut   = pDataGradOut;
   const float * restrict pKernel = pDataKernel;
@@ -55,9 +56,9 @@ vednnConvolutionBackwardData_direct_dil1_str1_iwU128(
     for (int64_t n=0; n<batch; n++) {
       for (int64_t g = 0; g < group; g++) {
 
-	int64_t gInGroupOffset  = g * gInChannelGroup * gInHeight * gInWidth;
+	int64_t gInGroupOffset  = g * gInChannelOffset * gInHeight * gInWidth;
 	int64_t gOutGroupOffset = g * gOutChannelGroup * gOutHeight * gOutWidth;
-	int64_t kernGroupOffset = g * gOutChannelGroup * gInChannelGroup * kernHeight * kernWidth;
+	int64_t kernGroupOffset = g * gOutChannelGroup * gInChannelOffset * kernHeight * kernWidth;
 
 	int64_t k=0;
 	if( (gInChannelGroup & 0x01 ) == 1 ) {
@@ -97,7 +98,7 @@ vednnConvolutionBackwardData_direct_dil1_str1_iwU128(
 		  __vr vrgout = _vel_vgtu_vvssml(vrgout_ptr, 0, 0, vmall, vl) ;
 		  vrgout = _vel_vmrg_vvvml(_vel_vbrds_vsl(0.0f, vl), vrgout, vmall, vl) ;
 
-		  int64_t kernelIndex = kernGroupOffset + ((c * gInChannelGroup + k) * kernHeight + r) * kernWidth + s;
+		  int64_t kernelIndex = kernGroupOffset + ((c * gInChannelOffset + k) * kernHeight + r) * kernWidth + s;
 
 		  vrsum = _vel_vfmads_vvsvl(vrsum, pKernel[kernelIndex], vrgout, vl) ;
 		} // gOutChannel
@@ -150,7 +151,7 @@ vednnConvolutionBackwardData_direct_dil1_str1_iwU128(
 
 		  __vr vrgoutP = _vel_vshf_vvvsl(vrgout, vrgout, VE_VSHUFFLE_YUZU, vl) ;
 
-		  const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelGroup + k) * kernHeight + r) * kernWidth + s;
+		  const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelOffset + k) * kernHeight + r) * kernWidth + s;
 
 		  const uint64_t kerValue01 = _vel_pack_f32p(pKerValue,
 							     pKerValue + kernHeight * kernWidth ) ;
@@ -208,7 +209,7 @@ vednnConvolutionBackwardData_direct_dil1_str1_iwU128(
 
 		  __vr vrgoutP = _vel_vshf_vvvsl(vrgout, vrgout, VE_VSHUFFLE_YUZU, vl) ;
 
-		  const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelGroup + k) * kernHeight + r) * kernWidth + s;
+		  const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelOffset + k) * kernHeight + r) * kernWidth + s;
 
 		  const uint64_t kerValue01 = _vel_pack_f32p(pKerValue,
 							     pKerValue + kernHeight * kernWidth ) ;
@@ -273,7 +274,7 @@ vednnConvolutionBackwardData_direct_dil1_str1_iwU128(
 
 		  __vr vrgoutP = _vel_vshf_vvvsl(vrgout, vrgout, VE_VSHUFFLE_YUZU, vl) ;
 
-		  const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelGroup + k) * kernHeight + r) * kernWidth + s;
+		  const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelOffset + k) * kernHeight + r) * kernWidth + s;
 
 		  const uint64_t kerValue01 = _vel_pack_f32p(pKerValue,
 							     pKerValue + kernHeight * kernWidth ) ;
@@ -352,7 +353,7 @@ vednnConvolutionBackwardData_direct_dil1_str1_iwU128(
 
 		  __vr vrgoutP = _vel_vshf_vvvsl(vrgout, vrgout, VE_VSHUFFLE_YUZU, vl) ;
 
-		  const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelGroup + k) * kernHeight + r) * kernWidth + s;
+		  const float *pKerValue = pKernel + kernGroupOffset + ((c * gInChannelOffset + k) * kernHeight + r) * kernWidth + s;
 
 		  const uint64_t kerValue01 = _vel_pack_f32p(pKerValue,
 							     pKerValue + kernHeight * kernWidth ) ;

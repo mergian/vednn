@@ -24,7 +24,7 @@ struct vednnConvBwdFunctor {
 		m_func(func), m_pO(pO), m_O(O), m_pW(pW), m_W(W), m_conv(conv), m_pI(pI), m_I(I)
 	{}
 
-	vednnError_t operator()(const int min_b, const int max_b, const int min_oc, const int max_oc) const {
+	vednnError_t operator()(const int min_b, const int max_b, const int min_ic, const int max_ic) const {
 		vednnTensorParam_t pI  = *m_pI;
 		pI.batch = max_b - min_b;
 
@@ -33,18 +33,18 @@ struct vednnConvBwdFunctor {
 		// don't set the channel here, so we know the stride!
 
 		vednnFilterParam_t pW = *m_pW;
-		pW.outChannel	= max_oc - min_oc;
+		pW.inChannel = max_ic - min_ic;
 
-		auto* I = ((T*)m_I) + min_b  * m_pI->channel * m_pI->height * m_pI->width;
-		auto* O = ((T*)m_O) + (min_b * m_pO->channel + min_oc) * m_pO->height * m_pO->width;
-		auto* W = ((T*)m_W) + min_oc * m_pW->inChannel * m_pW->height * m_pW->width;
+		auto* I = ((T*)m_I) + (min_b * m_pI->channel + min_ic) * m_pI->height * m_pI->width;
+		auto* O = ((T*)m_O) + min_b * m_pO->channel * m_pO->height * m_pO->width;
+		auto* W = ((T*)m_W) + min_ic * m_pW->height * m_pW->width; // OIP
 
 		return m_func(&pO, O, &pW, W, m_conv, &pI, I);
 	}
 };
 
 //------------------------------------------------------------------------------
-#define CALL(F) return vednn_launch_2d(pParamGradOut->batch, pParamGradOut->channel / pParamConv->group,\
+#define CALL(F) return vednn_launch_2d(pParamGradOut->batch, pParamGradIn->channel / pParamConv->group,\
 	vednnConvBwdFunctor<float>(&F, pParamGradOut, pDataGradOut, pParamKernel, pDataKernel,\
 		pParamConv, pParamGradIn, pDataGradIn))
 

@@ -759,7 +759,8 @@ vednnConvolutionBackwardData_direct_iwU128(
   const int64_t dilationHeight = pParamConv->dilationHeight;
 
   const int64_t gOutChannelGroup = gOutChannel  / group;
-  const int64_t gInChannelGroup  = gInChannel / group;
+  const int64_t gInChannelGroup  = pParamKernel->inChannel;
+  const int64_t gInChannelOffset = gInChannel / group;
 
   const float * restrict pGOut   = pDataGradOut;
   const float * restrict pKernel = pDataKernel;
@@ -779,9 +780,9 @@ vednnConvolutionBackwardData_direct_iwU128(
     for (int64_t n=0; n<batch; n++) {
       for (int64_t g = 0; g < group; g++) {
 
-	int64_t gInGroupOffset  = g * gInChannelGroup * gInHeight * gInWidth;
+	int64_t gInGroupOffset  = g * gInChannelOffset * gInHeight * gInWidth;
 	int64_t gOutGroupOffset = g * gOutChannelGroup * gOutHeight * gOutWidth;
-	int64_t kernGroupOffset = g * gOutChannelGroup * gInChannelGroup * kernHeight * kernWidth;
+	int64_t kernGroupOffset = g * gOutChannelGroup * gInChannelOffset * kernHeight * kernWidth;
 
 	int64_t k=0;
 	if( (gInChannelGroup & 0x01 ) == 1 ) {
@@ -793,7 +794,7 @@ vednnConvolutionBackwardData_direct_iwU128(
              strideWidth, strideHeight,
 	     padWidth, padHeight,
 	     dilationWidth, dilationHeight,
-	     gInChannelGroup, gOutChannelGroup,
+	     gInChannelOffset, gOutChannelGroup,
 	     gInGroupOffset, gOutGroupOffset, kernGroupOffset,
 	     gInPixels, n, k,
 	     nH, vrh, vrw ) ;
@@ -809,7 +810,7 @@ vednnConvolutionBackwardData_direct_iwU128(
              strideWidth, strideHeight,
 	     padWidth, padHeight,
 	     dilationWidth, dilationHeight,
-	     gInChannelGroup, gOutChannelGroup,
+	     gInChannelOffset, gOutChannelGroup,
 	     gInGroupOffset, gOutGroupOffset, kernGroupOffset,
 	     gInPixels, n, k,
 	     nH, vrh, vrw ) ;
@@ -825,7 +826,7 @@ vednnConvolutionBackwardData_direct_iwU128(
              strideWidth, strideHeight,
 	     padWidth, padHeight,
 	     dilationWidth, dilationHeight,
-	     gInChannelGroup, gOutChannelGroup,
+	     gInChannelOffset, gOutChannelGroup,
 	     gInGroupOffset, gOutGroupOffset, kernGroupOffset,
 	     gInPixels, n, k,
 	     nH, vrh, vrw ) ;
@@ -840,7 +841,7 @@ vednnConvolutionBackwardData_direct_iwU128(
              strideWidth, strideHeight,
 	     padWidth, padHeight,
 	     dilationWidth, dilationHeight,
-	     gInChannelGroup, gOutChannelGroup,
+	     gInChannelOffset, gOutChannelGroup,
 	     gInGroupOffset, gOutGroupOffset, kernGroupOffset,
 	     gInPixels, n, k,
 	     nH, vrh, vrw ) ;
