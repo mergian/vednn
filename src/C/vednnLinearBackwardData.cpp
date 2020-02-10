@@ -64,9 +64,11 @@ vednnError_t vednnLinearBackwardData(
     const uint64_t	nBatch,
     const void*		pDataGradOut,
     const void*		pDataWeight,
-    void*			pDataGradIn
+    void*			pDataGradIn,
+    const int		parallel
 ) {
 	//return vednn_launch_2d(nBatch, outDim, vednnLinearBwdFunctor<float>(inDim, outDim, nBatch, pDataGradOut, pDataWeight, pDataGradIn));
-	return vednn_launch_1d(inDim, vednnLinearBwdFunctor<float>(inDim, outDim, nBatch, pDataGradOut, pDataWeight, pDataGradIn));
+	vednnLinearBwdFunctor<float> op(inDim, outDim, nBatch, pDataGradOut, pDataWeight, pDataGradIn);
+	return parallel ? vednn_launch_1d(inDim, op) : op(0, inDim);
 }
 

@@ -126,7 +126,8 @@ vednnError_t vednnLinearForward(
     const unsigned long			nBatch,
     const void 				*pDataIn,
     const void 				*pDataWeight,
-    void 				*pDataOut
+    void 				*pDataOut,
+    const int		parallel
 ) ;
 
 vednnError_t vednnLinearBackwardData(
@@ -135,7 +136,8 @@ vednnError_t vednnLinearBackwardData(
     const unsigned long			nBatch,
     const void 				*pDataGradOut,
     const void 				*pDataWeight,
-    void 				*pData
+    void 				*pData,
+    const int		parallel
 ) ;
 
 vednnError_t vednnLinearBackwardWeight(
@@ -144,37 +146,8 @@ vednnError_t vednnLinearBackwardWeight(
     const unsigned long			nBatch,
     const void * 			pDataIn,
     const void * 			pDataGradOut,
-    void * 				pDataGradWeight
-) ;
-
-vednnError_t vednnBGEMMForward(
-    const unsigned long			inDim,
-    const unsigned long			outDim,
-    const unsigned long			nBatch,
-    const unsigned long         cnt,
-    const void 				*pDataIn,
-    const void 				*pDataWeight,
-    void 				*pDataOut
-) ;
-
-vednnError_t vednnBGEMMBackwardData(
-    const unsigned long			inDim,
-    const unsigned long			outDim,
-    const unsigned long			nBatch,
-    const unsigned long         cnt,
-    const void 				*pDataGradOut,
-    const void 				*pDataWeight,
-    void 				*pData
-) ;
-
-vednnError_t vednnBGEMMBackwardWeight(
-    const unsigned long			inDim,
-    const unsigned long			outDim,
-    const unsigned long			nBatch,
-    const unsigned long         cnt,
-    const void * 			pDataIn,
-    const void * 			pDataGradOut,
-    void * 				pDataGradWeight
+    void * 				pDataGradWeight,
+    const int		parallel
 ) ;
 
 vednnError_t vednnMaxPoolingForward(

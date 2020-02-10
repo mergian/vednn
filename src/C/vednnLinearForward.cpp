@@ -60,9 +60,11 @@ vednnError_t vednnLinearForward(
     const uint64_t	nBatch,
     const void*		pDataIn,
     const void*		pDataWeight,
-    void*			pDataOut
+    void*			pDataOut,
+    const int		parallel
 ) {
 	//return vednn_launch_2d(nBatch, outDim, vednnLinearFwdFunctor<float>(inDim, outDim, nBatch, pDataIn, pDataWeight, pDataOut));
-	return vednn_launch_1d(outDim, vednnLinearFwdFunctor<float>(inDim, outDim, nBatch, pDataIn, pDataWeight, pDataOut));
+	vednnLinearFwdFunctor<float> op(inDim, outDim, nBatch, pDataIn, pDataWeight, pDataOut);
+	return parallel ? vednn_launch_1d(outDim, op) : op(0, outDim);
 }
 

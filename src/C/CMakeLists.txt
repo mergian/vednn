@@ -16,9 +16,6 @@ add_library(vednn_c_code OBJECT
 	vednnLinearForward.cpp
 	vednnLinearBackwardData.cpp
 	vednnLinearBackwardWeight.cpp
-	vednnBGEMMForward.cpp
-	vednnBGEMMBackwardData.cpp
-	vednnBGEMMBackwardWeight.cpp
 #	vednnActivationForward.c
 #	vednnActivationBackward.c
 #	vednnMaxPoolingForward.c

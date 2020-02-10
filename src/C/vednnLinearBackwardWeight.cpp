@@ -32,9 +32,11 @@ vednnError_t vednnLinearBackwardWeight(
     const uint64_t	nBatch,
     const void* 	pDataIn,
     const void* 	pDataGradOut,
-    void* 			pDataGradWeight
+    void* 			pDataGradWeight,
+    const int		parallel
 ) {
-	return vednn_launch_1d(inDim, vednnLinearFilFunctor<float>(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight));
+	vednnLinearFilFunctor<float> op(inDim, outDim, nBatch, pDataIn, pDataGradOut, pDataGradWeight);
+	return parallel ? vednn_launch_1d(inDim, op) : op(0, inDim);
 }
 
 

@@ -511,7 +511,7 @@ vednnConvolutionBackwardData_direct_default(
   const int64_t dilationWidth  = pParamConv->dilationWidth;
   const int64_t dilationHeight = pParamConv->dilationHeight;
 
-  const int64_t gOutChannelGroup = gOutChannel  / group;
+  const int64_t gOutChannelGroup = gOutChannel / group;
   const int64_t gInChannelGroup  = pParamKernel->inChannel;
   const int64_t gInChannelOffset = gInChannel / group;
 
