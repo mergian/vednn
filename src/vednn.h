@@ -124,30 +124,30 @@ vednnError_t vednnLinearForward(
     const unsigned long			inDim,
     const unsigned long			outDim,
     const unsigned long			nBatch,
+    const unsigned long			bgemm,
     const void 				*pDataIn,
     const void 				*pDataWeight,
-    void 				*pDataOut,
-    const int		parallel
+    void 				*pDataOut
 ) ;
 
 vednnError_t vednnLinearBackwardData(
     const unsigned long			inDim,
     const unsigned long			outDim,
     const unsigned long			nBatch,
+    const unsigned long			bgemm,
     const void 				*pDataGradOut,
     const void 				*pDataWeight,
-    void 				*pData,
-    const int		parallel
+    void 				*pData
 ) ;
 
 vednnError_t vednnLinearBackwardWeight(
     const unsigned long			inDim,
     const unsigned long			outDim,
     const unsigned long			nBatch,
+    const unsigned long			bgemm,
     const void * 			pDataIn,
     const void * 			pDataGradOut,
-    void * 				pDataGradWeight,
-    const int		parallel
+    void * 				pDataGradWeight
 ) ;
 
 vednnError_t vednnMaxPoolingForward(
