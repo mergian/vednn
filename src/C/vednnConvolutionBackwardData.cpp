@@ -24,6 +24,10 @@ struct vednnConvBwdFunctor {
 		m_func(func), m_pO(pO), m_O(O), m_pW(pW), m_W(W), m_conv(conv), m_pI(pI), m_I(I)
 	{}
 
+	vednnError_t operator()(const int min_b, const int max_b) const {
+		return operator()(min_b, max_b, 0, m_pI->channel);
+	}
+		
 	vednnError_t operator()(const int min_b, const int max_b, const int min_ic, const int max_ic) const {
 		vednnTensorParam_t pI  = *m_pI;
 		pI.batch = max_b - min_b;
@@ -44,6 +48,10 @@ struct vednnConvBwdFunctor {
 };
 
 //------------------------------------------------------------------------------
+#define CALL1D(F) return vednn_launch_1d(pParamGradOut->batch,\
+	vednnConvBwdFunctor<float>(&F, pParamGradOut, pDataGradOut, pParamKernel, pDataKernel,\
+		pParamConv, pParamGradIn, pDataGradIn))
+
 #define CALL(F) return vednn_launch_2d(pParamGradOut->batch, pParamGradIn->channel / pParamConv->group,\
 	vednnConvBwdFunctor<float>(&F, pParamGradOut, pDataGradOut, pParamKernel, pDataKernel,\
 		pParamConv, pParamGradIn, pDataGradIn))
@@ -64,7 +72,7 @@ vednnError_t vednnConvolutionBackwardData(
 		if(pParamGradIn->height * pParamGradIn->width <= 16 ||
 			(pParamGradIn->height * pParamGradIn->width < 64
 	  		&& pParamGradIn->height * pParamGradIn->width < pParamGradIn->channel)) {
-	  		CALL(vednnConvolutionBackwardData_direct_vecC);
+	  		CALL1D(vednnConvolutionBackwardData_direct_vecC);
     	} else if(pParamConv->strideHeight == 1 && pParamConv->strideWidth == 1
 			&& pParamConv->dilationHeight == 1 && pParamConv->dilationWidth == 1) {
       		if(pParamGradIn->height == pParamGradOut->height && pParamGradIn->width == pParamGradOut->width) {
