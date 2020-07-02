@@ -21,16 +21,16 @@ struct vednnLinearFilFunctor {
 		m_ic(ic), m_oc(oc), m_b(b), m_bgemm(bgemm), m_I(I), m_O(O), m_W(W)
 	{}
 
-	vednnError_t operator()(const int min_ic, const int max_ic) const {
+	vednnError_t operator()(const int min, const int max) const {
 		if(m_bgemm == 1)
-			return vednnLinearBackwardWeight_default(m_ic, m_oc, m_b, m_I, m_O, m_W, min_ic, max_ic);
+			return vednnLinearBackwardWeight_default(m_ic, m_oc, m_b, m_I, m_O, m_W, min, max);
 
 		auto I = (T*)m_I;
 		auto O = (T*)m_O;
 		auto W = (T*)m_W;
 
 		int rc = 0;
-		for(int i = min_ic; i < max_ic; i++) {
+		for(int i = min; i < max; i++) {
 			rc |= vednnLinearBackwardWeight_default(m_ic, m_oc, m_b, I, O, W, 0, m_ic);
 			I += m_ic * m_b;
 			O += m_oc * m_b;
@@ -53,7 +53,3 @@ vednnError_t vednnLinearBackwardWeight(
 ) {
 	return vednn_launch_1d(bgemm == 1 ? inDim : bgemm, vednnLinearFilFunctor<float>(inDim, outDim, nBatch, bgemm, pDataIn, pDataGradOut, pDataGradWeight));
 }
-
-
-
-

@@ -8,14 +8,13 @@
 #include "velintrin.h"
 #define VLEN	(256)
 
-
 static inline void b1(
   const uint64_t	inDim,
   const uint64_t	outDim,
   const uint64_t	inIdx,
   const float * 	pGOut,
   const float * 	pWeight,
-  float * 		pGIn
+  float * 			pGIn
 )
 {
   int64_t i=0 ;

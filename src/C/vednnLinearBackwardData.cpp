@@ -38,40 +38,32 @@ struct vednnLinearBwdFunctor {
 		}		
 	}
 
-	vednnError_t operator()(const int min_b, const int max_b, const int min_oc, const int max_oc) const {
-		int b = max_b - min_b;
-		int oc = max_oc - min_oc;
-		auto I = ((T*)m_I) + m_ic * min_b;
-		auto O = ((T*)m_O) + m_oc * min_b + min_oc;
-		auto W = ((T*)m_W) + min_oc;
-		auto f = func(m_ic, oc, (uint64_t)I, (uint64_t)W, (uint64_t)O);
-		return f(m_ic, m_oc, oc, b, O, W, I);
-	}
-
-	vednnError_t operator()(const int min_ic, const int max_ic) const {
+	vednnError_t operator()(const int min, const int max) const {
 		if(m_bgemm == 1) {
-			int ic = max_ic - min_ic;
+			auto min_ic = min;
+			auto max_ic = max;
+			auto cnt_ic = max_ic - min_ic;
 			auto I = ((T*)m_I) + min_ic;
 			auto O = ((T*)m_O);
 			auto W = ((T*)m_W) + min_ic * m_oc;
-			auto f = func(ic, m_oc, (uint64_t)I, (uint64_t)W, (uint64_t)O);
-			return f(m_ic, m_oc, ic, m_b, O, W, I);
+			auto f = func(cnt_ic, m_oc, (uint64_t)I, (uint64_t)W, (uint64_t)O);
+			return f(m_ic, m_oc, cnt_ic, m_b, O, W, I);
+		} else {
+			auto I = (T*)m_I;
+			auto O = (T*)m_O;
+			auto W = (T*)m_W;
+			auto f = func(m_ic, m_oc, (uint64_t)I, (uint64_t)W, (uint64_t)O);
+
+			int rc = 0;
+			for(int i = min; i < max; i++) {
+				rc |= f(m_ic, m_oc, m_ic, m_b, O, W, I);
+				I += m_ic * m_b;
+				O += m_oc * m_b;
+				W += m_oc * m_ic;
+			}
+
+			return (vednnError_t)rc;
 		}
-
-		auto I = (T*)m_I;
-		auto O = (T*)m_O;
-		auto W = (T*)m_W;
-		auto f = func(m_ic, m_oc, (uint64_t)I, (uint64_t)W, (uint64_t)O);
-
-		int rc = 0;
-		for(int i = min_ic; i < max_ic; i++) {
-			rc |= f(m_ic, m_oc, m_ic, m_b, O, W, I);
-			I += m_ic * m_b;
-			O += m_oc * m_b;
-			W += m_oc * m_ic;
-		}
-
-		return (vednnError_t)rc;
 	}
 };
 
@@ -85,7 +77,5 @@ vednnError_t vednnLinearBackwardData(
     const void*		pDataWeight,
     void*			pDataGradIn
 ) {
-	//return vednn_launch_2d(nBatch, outDim, vednnLinearBwdFunctor<float>(inDim, outDim, nBatch, pDataGradOut, pDataWeight, pDataGradIn));
 	return vednn_launch_1d(bgemm == 1 ? inDim : bgemm, vednnLinearBwdFunctor<float>(inDim, outDim, nBatch, bgemm, pDataGradOut, pDataWeight, pDataGradIn));
 }
-
